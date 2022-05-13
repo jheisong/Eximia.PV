@@ -1,13 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using PV.Sample01.Api.Models.Receivables;
+using Sync.Api.Application.Receivables.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace PV.Sample01.Api.Controllers
+namespace Sync.Api.Application.Receivables.Controllers
 {
     [ApiController]
     [Route("[controller]")]
@@ -30,6 +27,7 @@ namespace PV.Sample01.Api.Controllers
         public IActionResult Get()
         {
             var rng = new Random();
+
             var result = Enumerable.Range(1, 5).Select(index => new ReceivableUnit
             {
                 Date = DateTime.Now.AddDays(index),

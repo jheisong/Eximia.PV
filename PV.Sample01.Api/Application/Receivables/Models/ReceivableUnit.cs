@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PV.Sample01.Api.Models.Receivables
+namespace Sync.Api.Application.Receivables.Models
 {
     public class ReceivableUnit
     {

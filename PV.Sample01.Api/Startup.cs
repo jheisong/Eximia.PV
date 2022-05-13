@@ -1,18 +1,11 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace PV.Sample01.Api
+namespace Sync.Api
 {
     public class Startup
     {
@@ -28,7 +21,7 @@ namespace PV.Sample01.Api
         {
 
             services.AddControllers();
-           
+
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy",
@@ -56,7 +49,7 @@ namespace PV.Sample01.Api
             app.UseHttpsRedirection();
             app.UseCors("CorsPolicy");
             app.UseRouting();
-     
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
