@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { Col, Container, Input, Row } from 'reactstrap';
 import { ApplicationState } from '../store';
 import * as _receivable from '../store/Receivable';
+import './Generic.css';
 
 type ReceivableProps = _receivable.ReceivableState
     & typeof _receivable.actionCreators
@@ -23,7 +24,11 @@ class ReceivableData extends React.PureComponent<ReceivableProps> {
     /*public componentDidUpdate() {
         this.ensureReceivables();
     }*/
-
+    constructor(props: any) {
+        super(props);
+        props.isSync === true;
+        props.requestReceivable();
+    }
 
     public render() {
         return (
@@ -45,7 +50,7 @@ class ReceivableData extends React.PureComponent<ReceivableProps> {
         return (
             <div>
                 <Container>
-                    <Row>
+                    <Row className="row" >
                         <Col>
                             <div>
                                 <span>Comunicação</span>
@@ -53,12 +58,12 @@ class ReceivableData extends React.PureComponent<ReceivableProps> {
                         </Col>
                         <Col>
                             <div>
-                                <input type="radio"  name="comunication" onClick={() => this.props.isSync === true} /> Synchronous
-                                <input type="radio"  name="comunication" onClick={() => this.props.isSync === false}  /> Asynchronous
+                                <input type="radio" className="radio" name="comunication" defaultChecked onClick={() => this.props.isSync === true} /> Synchronous
+                                <input type="radio" className="radio" name="comunication" onClick={() => this.props.isSync === false} /> Asynchronous
                             </div>
                         </Col>
                     </Row>
-                    <Row>
+                    <Row className="row" >
                         <Col>
                             <div>
                                 <span>Valor Total em Carteira</span>
@@ -70,7 +75,7 @@ class ReceivableData extends React.PureComponent<ReceivableProps> {
                             </div>
                         </Col>
                     </Row>
-                    <Row>
+                    <Row className="row" >
                         <Col>
                             <div>
                                 <span>Valor Elegível</span>
@@ -90,28 +95,20 @@ class ReceivableData extends React.PureComponent<ReceivableProps> {
     private renderToReceivableTable() {
         return (<div>
             <Container>
-                <Row>
-                    <Col>
+                <Row className="row" >
+                    <Col sm={10} >
                         <div>
                             <span>Opçoes de Recebíves</span>
                         </div>
                     </Col>
-                    <Col>
-                        <div>
-                            <button type="button"
-                                className="btn btn-outline-secondary btn-sm"
-                                onClick={() => { this.props.requestReceivable() }}>
-                                Atualizar
-                            </button>
-                        </div>
-                    </Col>
+
                 </Row>
-                <Row>
+                <Row className="row" >
                     <Col>
                         <table className='table table-striped' aria-labelledby="tabelLabel">
                             <thead>
                                 <tr>
-                                    <th><Input type="checkbox"/></th>
+                                    <th className="th-center"><Input type="checkbox" /></th>
                                     <th>Produto</th>
                                     <th>Bandeira</th>
                                     <th>Data</th>
@@ -124,7 +121,7 @@ class ReceivableData extends React.PureComponent<ReceivableProps> {
                             <tbody>
                                 {this.props.receivables.map((receivable: _receivable.ReceivableInput) =>
                                     <tr key={receivable.product}>
-                                        <td><Input type="checkbox" checked={receivable.selected} /></td>
+                                        <td className="th-center"><Input type="checkbox" checked={receivable.selected} /></td>
                                         <td>{receivable.product}</td>
                                         <td>{receivable.flag}</td>
                                         <td>{receivable.date}</td>
@@ -138,6 +135,17 @@ class ReceivableData extends React.PureComponent<ReceivableProps> {
                         </table>
                     </Col>
                 </Row>
+                <Row className="row" >
+                    <Col>
+                        <div className="div-buton">
+                            <button type="button"
+                                className="btn btn-outline-secondary btn-sm"
+                                onClick={() => { this.props.requestReceivable() }}>
+                                Antecipar
+                            </button>
+                        </div>
+                    </Col>
+                </Row>
             </Container>
         </div>
         );
@@ -146,23 +154,14 @@ class ReceivableData extends React.PureComponent<ReceivableProps> {
     private renderToReceivableHistoryTable() {
         return (
             <Container>
-                <Row>
+                <Row className="row" >
                     <Col>
                         <div>
                             <span>Ultimas Antecipações</span>
                         </div>
                     </Col>
-                    <Col>
-                        <div>
-                            <button type="button"
-                                className="btn btn-outline-secondary btn-sm"
-                                onClick={() => { this.props.requestReceivable() }}>
-                                Atualizar
-                            </button>
-                        </div>
-                    </Col>
                 </Row>
-                <Row>
+                <Row className="row" >
                     <Col>
                         <table className='table table-striped' aria-labelledby="tabelLabel">
                             <thead>

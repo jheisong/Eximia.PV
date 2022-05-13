@@ -39,19 +39,34 @@ export const actionCreators = {
                 fetch('https://localhost:44366/ReceivableUnit')
                     .then(response => response.json() as Promise<ReceivableInput[]>)
                     .then(data => {
+
                         dispatch({ type: 'RECEIVE_RECEIVABLES', receivables: data });
                     });
-                dispatch({ type: 'REQUEST_RECEIVABLES' });
+            }                     
+        }
+    },
+
+    sendAntecipacao: (): AppThunkAction<KnownAction> => (dispatch, getState) => {
+        const appState = getState();
+        if (appState && appState.receivable) {
+            if (appState.receivable.isSync) {
+                fetch('https://localhost:44366/ReceivableUnit')
+                    .then(response => response.json() as Promise<ReceivableInput[]>)
+                    .then(data => {
+
+                        dispatch({ type: 'RECEIVE_RECEIVABLES', receivables: data });
+                    });
+                // dispatch({ type: 'REQUEST_RECEIVABLES' });
             } else {
                 fetch('https://localhost:44366/Receivabl')
                     .then(response => response.json() as Promise<ReceivableInput[]>)
                     .then(data => {
                         dispatch({ type: 'RECEIVE_RECEIVABLES', receivables: data });
                     });
-                dispatch({ type: 'REQUEST_RECEIVABLES' });
+                // dispatch({ type: 'REQUEST_RECEIVABLES' });
             }
         }
-    }
+    }    
 };
 
 const unloadedState: ReceivableState = { receivables: [], isLoading: false, isSync: true };
