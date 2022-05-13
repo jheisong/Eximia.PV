@@ -1,13 +1,19 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Sync.Api.Application.Receivables.Models;
-using System;
-using System.Linq;
+using System.Collections.Generic;
 
 namespace Sync.Api.Application.Receivables.Controllers
 {
+
     [ApiController]
-    [Route("[controller]")]
+    [ControllerName("Receivable Units")]
+    [Route("api/v1/receivable-unit")]
+    [Produces("application/json")]
+    [ApiVersion("1.0")]
+    [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
     public class ReceivableUnitController : Controller
     {
         private readonly ILogger<ReceivableUnitController> _logger;
@@ -17,30 +23,33 @@ namespace Sync.Api.Application.Receivables.Controllers
             _logger = logger;
         }
 
-        private static readonly string[] Products = new[]
+        private static readonly List<ReceivableUnit> receivableUnitsInMemory = new List<ReceivableUnit>
         {
-            "Pague Veloz", "Stone", "Cielo", "Pague Seguro", "GetNet"
+            ReceivableUnit.CreateRandomly(),
+            ReceivableUnit.CreateRandomly(),
+            ReceivableUnit.CreateRandomly(),
+            ReceivableUnit.CreateRandomly(),
+            ReceivableUnit.CreateRandomly()
         };
 
-
-        [HttpGet]
+        [HttpGet()]
         public IActionResult Get()
         {
-            var rng = new Random();
+            //REPRODUZINDO UMA CHAMADA LENTA AO BANCO DE DADOS.
+            System.Threading.Thread.Sleep(5000);
 
-            var result = Enumerable.Range(1, 5).Select(index => new ReceivableUnit
-            {
-                Date = DateTime.Now.AddDays(index),
-                Product = Products[rng.Next(Products.Length)],
-                Flag = "Bandeira",
-                Document = "000.000.010/0001-00",
-                GrossValue = rng.Next(1, 5) * 100,
-                Discount = 0,
-                Value = rng.Next(1, 5) * 100
-            })
-            .ToArray();
+            return new OkObjectResult(receivableUnitsInMemory);
+        }
 
-            return new OkObjectResult(result);
+        [HttpPut()]
+        public IActionResult Put()
+        {
+            //REPRODUZINDO UMA CHAMADA LENTA AO BANCO DE DADOS.
+            System.Threading.Thread.Sleep(2000);
+
+            receivableUnitsInMemory.Add(ReceivableUnit.CreateRandomly());
+
+            return new OkResult();
         }
     }
 }
