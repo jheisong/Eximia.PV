@@ -1,28 +1,16 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Sync.Api.Application.Receivables.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using Sync.Api.Models;
 using System.Collections.Generic;
 
-namespace Sync.Api.Application.Receivables.Controllers
+namespace Sync.Api.Application.Controllers
 {
-
     [ApiController]
     [ControllerName("Receivable Units")]
     [Route("api/v1/receivable-unit")]
     [Produces("application/json")]
     [ApiVersion("1.0")]
-    [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
     public class ReceivableUnitController : Controller
     {
-        private readonly ILogger<ReceivableUnitController> _logger;
-
-        public ReceivableUnitController(ILogger<ReceivableUnitController> logger)
-        {
-            _logger = logger;
-        }
-
         private static readonly List<ReceivableUnit> receivableUnitsInMemory = new List<ReceivableUnit>
         {
             ReceivableUnit.CreateRandomly(),
