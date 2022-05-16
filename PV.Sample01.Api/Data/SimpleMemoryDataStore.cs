@@ -32,7 +32,9 @@ namespace Sync.Api.Data
 
         public static ReceivableUnit GetReceivableUnit(Guid id)
         {
-            var result = ReceivableUnitsInMemory.SingleOrDefault(x => x.Id == id);
+            var list = ReceivableUnitsInMemory;
+
+            var result = list.SingleOrDefault(x => x.Id == id);
 
             return result;
         }
