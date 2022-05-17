@@ -1,7 +1,7 @@
 ﻿
 
 
-const urlbase: string = "https://localhost:44366/api/";
+const urlbase: string = "https://localhost:44366/api/v1/";
 
 function request<TResponse>(
     url: string,

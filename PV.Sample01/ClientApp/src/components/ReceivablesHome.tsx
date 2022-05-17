@@ -4,7 +4,7 @@ import { RouteComponentProps } from 'react-router';
 import { Link } from 'react-router-dom';
 import { Col, Container, Input, Row } from 'reactstrap';
 import { ApplicationState } from '../store';
-import * as _receivable from '../store/Receivable';
+import * as _receivable from '../store/receivable';
 import { ReceivableState, IReceivableInput } from '../store/interfaces';
 import './Generic.css';
 
@@ -15,15 +15,6 @@ type ReceivableProps = ReceivableState
 
 class ReceivableData extends React.PureComponent<ReceivableProps> {
 
-    // This method is called when the component is first added to the document
-    /*public componentDidMount() {
-        this.ensureReceivables();
-    }*/
-
-    // This method is called when the route parameters change
-    /*public componentDidUpdate() {
-        this.ensureReceivables();
-    }*/
     constructor(props: any) {
         super(props);
         props.isSync === true;
@@ -71,7 +62,7 @@ class ReceivableData extends React.PureComponent<ReceivableProps> {
                         </Col>
                         <Col>
                             <div>
-                                <span>$ 188.00</span>
+                                <span></span>
                             </div>
                         </Col>
                     </Row>
@@ -83,7 +74,7 @@ class ReceivableData extends React.PureComponent<ReceivableProps> {
                         </Col>
                         <Col>
                             <div>
-                                <span>$ 100.00</span>
+                                <span></span>
                             </div>
                         </Col>
                     </Row>

@@ -14,15 +14,15 @@ interface ReceiveReceivableAction {
 export type KnownAction = RequestReceivableAction | ReceiveReceivableAction
 
 function GetReceivables(): Promise<IReceivableInput[]> {
-    return Api.get<IReceivableInput[]>('v1/receivable-unit');
+    return Api.get<IReceivableInput[]>('receivable-unit');
 }
 
 function AddReceivable(): Promise<IReceivableInput[]> {
-    return Api.put<IReceivableInput[]>('v1/receivable-unit');
+    return Api.put<IReceivableInput[]>('receivable-unit');
 }
 
 function ApplayReceivable(id: string): Promise<boolean> {
-    return Api.put<boolean>('v1/order/id/' + id);
+    return Api.put<boolean>('order/id/' + id);
 }
 
 export const actionsReceivables = {
