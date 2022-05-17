@@ -1,5 +1,5 @@
 import { Action, Reducer } from 'redux';
-import { AppThunkAction } from './';
+import { AppThunkAction } from './index';
 import { IReceivableInput, ReceivableState } from './interfaces';
 import { Api } from '../service/service';
 
