@@ -12,13 +12,14 @@ export const reducer: Reducer<ReceivableState> = (state: ReceivableState | undef
 
     const action = incomingAction as KnownAction;
     switch (action.type) {
-        case 'REQUEST_RECEIVABLES':
+        case 'REQUEST_RECEIVABLES':           
             return {
                 receivables: state.receivables,
                 isSync: state.isSync,
                 isLoading: true
             };
         case 'RECEIVE_RECEIVABLES':
+            action.receivables.forEach(f => f.selected = false);
             return {
                 receivables: action.receivables,
                 isSync: state.isSync,

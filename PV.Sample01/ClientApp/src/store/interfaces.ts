@@ -1,7 +1,8 @@
 ﻿
 
 export interface IReceivableInput {
-    selected: boolean
+    id: string
+    currentStatus: string
     product: string
     flag: string
     date: Date
@@ -9,6 +10,7 @@ export interface IReceivableInput {
     grossValue: string
     discount: string
     value: string
+    selected: boolean
 }
 
 export interface ReceivableState {

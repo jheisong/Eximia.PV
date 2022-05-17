@@ -127,9 +127,13 @@ class ReceivableData extends React.PureComponent<ReceivableProps> {
                                 </tr>
                             </thead>
                             <tbody>
-                                {this.props.receivables.map((receivable: IReceivableInput) =>
+                                {this.props.receivables.filter(f => f.currentStatus === "Created").map((receivable: IReceivableInput) =>
                                     <tr key={receivable.product}>
-                                        <td className="th-center"><Input type="checkbox" checked={receivable.selected} /></td>
+                                        <td className="th-center">
+                                            <Input type="checkbox"
+                                                defaultChecked={receivable.selected}
+                                                onChange={() => receivable.selected = true }
+                                            /></td>
                                         <td>{receivable.product}</td>
                                         <td>{receivable.flag}</td>
                                         <td>{receivable.date}</td>
@@ -148,7 +152,7 @@ class ReceivableData extends React.PureComponent<ReceivableProps> {
                         <div className="div-buton">
                             <button type="button"
                                 className="btn btn-outline-secondary btn-sm"
-                                onClick={() => { this.props.requestReceivable() }}>
+                                onClick={() => { this.props.requestApplyReceivable(this.props.receivables) }}>
                                 Antecipar
                             </button>
                         </div>
@@ -185,9 +189,9 @@ class ReceivableData extends React.PureComponent<ReceivableProps> {
                                 </tr>
                             </thead>
                             <tbody>
-                                {this.props.receivables.map((receivable: IReceivableInput) =>
+                                {this.props.receivables.filter(f => f.currentStatus !== "Created").map((receivable: IReceivableInput) =>
                                     <tr key={receivable.product}>
-                                        <td>Status</td>
+                                        <td>{receivable.currentStatus}</td>
                                         <td>{receivable.product}</td>
                                         <td>{receivable.flag}</td>
                                         <td>00</td>
