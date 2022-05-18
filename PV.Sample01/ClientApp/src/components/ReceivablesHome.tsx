@@ -1,29 +1,20 @@
 import * as React from 'react';
-import format from 'date-fns/format'
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
 import { Link } from 'react-router-dom';
 import { Col, Container, Input, Row } from 'reactstrap';
 import { ApplicationState } from '../store';
-import * as _receivable from '../store/Receivable';
+import * as _receivable from '../store/receivable';
+import { ReceivableState, IReceivableInput } from '../store/interfaces';
 import './Generic.css';
 
-type ReceivableProps = _receivable.ReceivableState
-    & typeof _receivable.actionCreators
+type ReceivableProps = ReceivableState
+    & typeof _receivable.actionsReceivables
     & RouteComponentProps<{ startDateIndex: string }>;
 
 
 class ReceivableData extends React.PureComponent<ReceivableProps> {
 
-    // This method is called when the component is first added to the document
-    /*public componentDidMount() {
-        this.ensureReceivables();
-    }*/
-
-    // This method is called when the route parameters change
-    /*public componentDidUpdate() {
-        this.ensureReceivables();
-    }*/
     constructor(props: any) {
         super(props);
         props.isSync === true;
@@ -71,7 +62,7 @@ class ReceivableData extends React.PureComponent<ReceivableProps> {
                         </Col>
                         <Col>
                             <div>
-                                <span>$ 188.00</span>
+                                <span></span>
                             </div>
                         </Col>
                     </Row>
@@ -83,7 +74,7 @@ class ReceivableData extends React.PureComponent<ReceivableProps> {
                         </Col>
                         <Col>
                             <div>
-                                <span>$ 100.00</span>
+                                <span></span>
                             </div>
                         </Col>
                     </Row>
@@ -96,12 +87,20 @@ class ReceivableData extends React.PureComponent<ReceivableProps> {
         return (<div>
             <Container>
                 <Row className="row" >
-                    <Col sm={10} >
+                    <Col sm={8} >
                         <div>
                             <span>Opçoes de Recebíves</span>
                         </div>
                     </Col>
-
+                    <Col>
+                        <div className="div-buton">
+                            <button type="button"
+                                className="btn btn-outline-secondary btn-sm"
+                                onClick={() => { this.props.requestAddReceivable() }}>
+                                Add Recebível
+                            </button>
+                        </div>
+                    </Col>
                 </Row>
                 <Row className="row" >
                     <Col>
@@ -119,9 +118,13 @@ class ReceivableData extends React.PureComponent<ReceivableProps> {
                                 </tr>
                             </thead>
                             <tbody>
-                                {this.props.receivables.map((receivable: _receivable.ReceivableInput) =>
+                                {this.props.receivables.filter(f => f.currentStatus === "Created").map((receivable: IReceivableInput) =>
                                     <tr key={receivable.product}>
-                                        <td className="th-center"><Input type="checkbox" checked={receivable.selected} /></td>
+                                        <td className="th-center">
+                                            <Input type="checkbox"
+                                                defaultChecked={receivable.selected}
+                                                onChange={() => receivable.selected = true }
+                                            /></td>
                                         <td>{receivable.product}</td>
                                         <td>{receivable.flag}</td>
                                         <td>{receivable.date}</td>
@@ -140,7 +143,7 @@ class ReceivableData extends React.PureComponent<ReceivableProps> {
                         <div className="div-buton">
                             <button type="button"
                                 className="btn btn-outline-secondary btn-sm"
-                                onClick={() => { this.props.requestReceivable() }}>
+                                onClick={() => { this.props.requestApplyReceivable(this.props.receivables) }}>
                                 Antecipar
                             </button>
                         </div>
@@ -177,9 +180,9 @@ class ReceivableData extends React.PureComponent<ReceivableProps> {
                                 </tr>
                             </thead>
                             <tbody>
-                                {this.props.receivables.map((receivable: _receivable.ReceivableInput) =>
+                                {this.props.receivables.filter(f => f.currentStatus !== "Created").map((receivable: IReceivableInput) =>
                                     <tr key={receivable.product}>
-                                        <td>Status</td>
+                                        <td>{receivable.currentStatus}</td>
                                         <td>{receivable.product}</td>
                                         <td>{receivable.flag}</td>
                                         <td>00</td>
@@ -196,10 +199,9 @@ class ReceivableData extends React.PureComponent<ReceivableProps> {
             </Container>
         );
     }
-
 }
 
 export default connect(
     (state: ApplicationState) => state.receivable,
-    _receivable.actionCreators
+    _receivable.actionsReceivables
 )(ReceivableData as any);

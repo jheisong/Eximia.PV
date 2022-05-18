@@ -1,101 +1,55 @@
 import { Action, Reducer } from 'redux';
-import { AppThunkAction } from './';
-
-
-export interface ReceivableState {
-    isLoading: boolean;
-    isSync: boolean;
-    receivables: ReceivableInput[];
-}
-
-export interface ReceivableInput {
-    selected: boolean
-    product: string
-    flag: string
-    date: Date
-    document: string
-    grossValue: string
-    discount: string
-    value: string
-}
+import { AppThunkAction } from './index';
+import { IReceivableInput, ReceivableState } from './interfaces';
+import { Api } from '../service/service';
 
 interface RequestReceivableAction {
     type: 'REQUEST_RECEIVABLES';
 }
-
 interface ReceiveReceivableAction {
     type: 'RECEIVE_RECEIVABLES';
-    receivables: ReceivableInput[];
+    receivables: IReceivableInput[];
 }
 
-type KnownAction = RequestReceivableAction | ReceiveReceivableAction;
+export type KnownAction = RequestReceivableAction | ReceiveReceivableAction
 
+function GetReceivables(): Promise<IReceivableInput[]> {
+    return Api.get<IReceivableInput[]>('receivable-unit');
+}
 
-export const actionCreators = {
+function AddReceivable(): Promise<IReceivableInput[]> {
+    return Api.put<IReceivableInput[]>('receivable-unit');
+}
+
+function ApplayReceivable(id: string): Promise<boolean> {
+    return Api.put<boolean>('order/id/' + id);
+}
+
+export const actionsReceivables = {
+
     requestReceivable: (): AppThunkAction<KnownAction> => (dispatch, getState) => {
         const appState = getState();
         if (appState && appState.receivable) {
             if (appState.receivable.isSync) {
-                fetch('https://localhost:44366/ReceivableUnit')
-                    .then(response => response.json() as Promise<ReceivableInput[]>)
-                    .then(data => {
-
-                        dispatch({ type: 'RECEIVE_RECEIVABLES', receivables: data });
-                    });
-            }                     
+                GetReceivables().then(data => {
+                    dispatch({ type: "RECEIVE_RECEIVABLES", receivables: data })
+                });
+            }
         }
     },
-
-    sendAntecipacao: (): AppThunkAction<KnownAction> => (dispatch, getState) => {
+    requestAddReceivable: (): AppThunkAction<KnownAction> => (dispatch, getState) => {
         const appState = getState();
         if (appState && appState.receivable) {
             if (appState.receivable.isSync) {
-                fetch('https://localhost:44366/ReceivableUnit')
-                    .then(response => response.json() as Promise<ReceivableInput[]>)
-                    .then(data => {
-
-                        dispatch({ type: 'RECEIVE_RECEIVABLES', receivables: data });
-                    });
-                // dispatch({ type: 'REQUEST_RECEIVABLES' });
-            } else {
-                fetch('https://localhost:44366/Receivabl')
-                    .then(response => response.json() as Promise<ReceivableInput[]>)
-                    .then(data => {
-                        dispatch({ type: 'RECEIVE_RECEIVABLES', receivables: data });
-                    });
-                // dispatch({ type: 'REQUEST_RECEIVABLES' });
+                AddReceivable();
+                GetReceivables().then(data => dispatch({ type: "RECEIVE_RECEIVABLES", receivables: data }));
             }
         }
-    }    
-};
+    },
+    requestApplyReceivable: (receivables: IReceivableInput[]): AppThunkAction<KnownAction> => (dispatch, getState) => {
 
-const unloadedState: ReceivableState = { receivables: [], isLoading: false, isSync: true };
-
-export const reducer: Reducer<ReceivableState> = (state: ReceivableState | undefined, incomingAction: Action): ReceivableState => {
-    if (state === undefined) {
-        return unloadedState;
+        receivables.filter(f => f.selected).forEach(r => ApplayReceivable(r.id));
+        GetReceivables().then(data => dispatch({ type: "RECEIVE_RECEIVABLES", receivables: data }));
     }
 
-    const action = incomingAction as KnownAction;
-    switch (action.type) {
-        case 'REQUEST_RECEIVABLES':
-            return {
-                receivables: state.receivables,
-                isSync: state.isSync,
-                isLoading: true
-            };
-        case 'RECEIVE_RECEIVABLES':
-            // Only accept the incoming data if it matches the most recent request. This ensures we correctly
-            // handle out-of-order responses.
-            //if (this. action.startDateIndex === state.startDateIndex) {
-            return {
-                receivables: action.receivables,
-                isSync: state.isSync,
-                isLoading: false
-            };
-
-            break;
-    }
-
-    return state;
 };
